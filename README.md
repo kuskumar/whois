@@ -1,17 +1,16 @@
 # whois
 Python code to fetch whois data for list of host and IP
 
-#Description
+# Description
 
-This code has been developed for purpose of importing large file with huge list of hostname for which whois data needs to be extracted.
-The code takes a file in csc format, the iterate through each hostname extarct the relevant data. The code can be modified as per user needs. 
+The code has been developed for purpose of iterating through a file containing list of hostname for which whois data needs to be extracted.Code takes a file in csv format then iterate through each hostname and extarct the relevant data and store the data in csv format.The code can be modified as per user needs.
 
-#Arguments
+# Arguments
 
 Code takes just one arguments which is input file.
 
-#Help
+# Help
 python whois.py --help
 
-#Usages
-pythin whois.py -i filename
+# Usages
+python whois.py -i filename
