@@ -3,7 +3,6 @@ from socket import gethostbyname, gaierror
 import optparse
 
 def lets_roll(input_filename):
-	#Replace the filename #
 	with open(input_filename,'r') as input: 
 		if os.path.exists(input_filename+'.csv'):
 			os.remove(input_filename+'.csv')
