@@ -1,5 +1,5 @@
 # whois
-Python code to fetch whois data for list of host and IP
+Python code to fetch whois data for list of host and IP. This tool runs on Linux/Kali box.
 
 # Description
 
