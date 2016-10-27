@@ -18,19 +18,22 @@ Customer='null'
 def lets_roll(input_filename):
 	target_list=[]
 	with open(input_filename,'r') as input: 
-		if os.path.exists(input_filename+'.csv'):
-			os.remove(input_filename+'.csv')
-		with open(output_filepath+'/output.csv','a') as output:
-			output.write('Target,Organization,Customer,IP,CIDR,NetRange,NetName,Address,City,State,PostalCode,Country,Source\n')
-			for line in input.readlines():
-				target_list.append((line.split(','))[0].strip('"').strip())
-			print "Fetching data for "+str(len(target_list)) 
-			for target in target_list:
-				(NetRange,CIDR,NetName,Organization,Customer,Address,City,State,PostalCode,Country),ip,source= whois_ip(target)
-				output.write(target+','+'"'+Organization+'"'+','+'"'+Customer+'"'+','+ip+','+CIDR+','+NetRange+', '+NetName+', '+'"'+Address+'"'+', '+City+', '+State+', '+PostalCode+', '+Country+','+source+'\n')	
+		if os.path.isfile(input_filename):
+			with open(output_filepath+'/output.csv','a') as output:
+				output.write('Target,Organization,Customer,IP,CIDR,NetRange,NetName,Address,City,State,PostalCode,Country,Source\n')
+				for line in input.readlines():
+					target_list.append((line.split(','))[0].strip('"').strip())
+				print "Fetching data for "+str(len(target_list)) 
+				for target in target_list:
+					(NetRange,CIDR,NetName,Organization,Customer,Address,City,State,PostalCode,Country),ip,source= whois_ip(target)
+					output.write(target+','+'"'+Organization+'"'+','+'"'+Customer+'"'+','+ip+','+CIDR+','+NetRange+', '+NetName+', '+'"'+Address+'"'+', '+City+', '+State+', '+PostalCode+', '+Country+','+source+'\n')	
 
-				percentage = (float(target_list.index(target))/len(target_list))*100
-				print '[+]'+ str(percentage)+"% completed"+'\n'
+					percentage = (float(target_list.index(target))/len(target_list))*100
+					print '[+]'+ str(percentage)+"% completed"+'\n'
+		else:		
+			print '[+]' + input_filename + ' :Does not exist'
+			exit(0)
+	
 
 def whois_ip(target): 
 	Range = []
@@ -60,7 +63,7 @@ def whois_ip(target):
 					result = ARIN(list2)
 				return result,ip,source
 
-			elif ("OrgId:RIPE" not in whoisIP) and (whoisIP.count('#end') ==0): #Case3. When whois retuens single ARIN or data from other server.
+			elif ("OrgId:RIPE" not in whoisIP) and (whoisIP.count('#end') ==0): #Case3. When whois returns single ARIN or data from other server.
 				source = "ARIN or See Organiztion column to cofirm"
 				result=ARIN(whoisIP)
 				return result,ip,source
