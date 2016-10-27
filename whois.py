@@ -2,6 +2,7 @@ import os
 import socket 
 import optparse
 from netaddr import *
+import math
 
 global output
 output_filepath= os.getcwd()
@@ -23,16 +24,19 @@ def lets_roll(input_filename):
 			output.write('Target,Organization,Customer,IP,CIDR,NetRange,NetName,Address,City,State,PostalCode,Country,Source\n')
 			for line in input.readlines():
 				target_list.append((line.split(','))[0].strip('"').strip())
-				exit(0)
+			print "Fetching data for "+str(len(target_list)) 
+			for target in target_list:
 				(NetRange,CIDR,NetName,Organization,Customer,Address,City,State,PostalCode,Country),ip,source= whois_ip(target)
-				output.write(target+','+'"'+Organization+'"'+','+'"'+Customer+'"'+','+ip+','+CIDR+','+NetRange+', '+NetName+', '+'"'+Address+'"'+', '+City+', '+State+', '+PostalCode+', '+Country+','+source+'\n')
+				output.write(target+','+'"'+Organization+'"'+','+'"'+Customer+'"'+','+ip+','+CIDR+','+NetRange+', '+NetName+', '+'"'+Address+'"'+', '+City+', '+State+', '+PostalCode+', '+Country+','+source+'\n')	
 
+				percentage = (float(target_list.index(target))/len(target_list))*100
+				print '[+]'+ str(percentage)+"% completed"+'\n'
 
 def whois_ip(target): 
 	Range = []
 	source ='null'
 	ip = resolve(target)
-	print ip
+#	print ip
 	if ip!='null':
 		whoisIP = (os.popen('whois -h whois.arin.net '+str(ip)+' | grep "OrgId\|NetRange:\|CIDR:\|NetName:\|Organization:\|inetnum:\|route:\|netname:\|descr:\|Customer\|# end\|Address:\|City:\|StateProv:\|PostalCode:\|Country\|country:"').read()).replace(" ","").split('\n')
 #Below function handles three cases returned by whois. 
@@ -197,7 +201,8 @@ def resolve(target):
 	try:			
 		print "[+] Resolving IP for "+target+'[+]'
 		ipv4 = socket.gethostbyname(target)
-	except socket.gaierror:
+	except socket.gaierror as error:
+		print error
 		ipv4='null'
 	return ipv4
 	
