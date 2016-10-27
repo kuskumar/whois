@@ -14,3 +14,7 @@ python whois.py --help
 
 # Usages
 python whois.py -i inputfilename
+
+# Prerequiste
+You need to install netaddr package. Fire below comamnd
+pip install netaddr
